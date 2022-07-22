@@ -155,9 +155,11 @@ class ChatVm extends GetxController {
           samplingRate: 44100, // by default
         );
       } else {
+        // Stop recording
         await record.stop();
       }
       if (!await record.isRecording()) {
+        //Add record on message
         final message = types.FileMessage(
           author: user,
           createdAt: DateTime.now().millisecondsSinceEpoch,
