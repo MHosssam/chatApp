@@ -64,7 +64,8 @@ class _ChatPageState extends State<ChatPage>
                   const Padding(
                       padding:  EdgeInsets.symmetric(horizontal: 6),
                       child: RecordButton()),
-                  Expanded(
+                            if (!controller.isRecording)
+  Expanded(
                     child: Container(
                       height: 42,
                       decoration: BoxDecoration(

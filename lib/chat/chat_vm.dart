@@ -171,6 +171,8 @@ class ChatVm extends GetxController {
         showDelete = false;
         isRecording = false;
         File(filePath!).delete();
+            update();
+
       });
     } else {
       animationController.reverse();
