@@ -1,4 +1,6 @@
 import 'package:chat/chat/chat_vm.dart';
+import 'package:chat/chat/components/chat_box.dart';
+import 'package:chat/chat/components/record_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
@@ -11,15 +13,26 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
-  @override
+class _ChatPageState extends State<ChatPage> with SingleTickerProviderStateMixin {
+        late AnimationController anController;
+
+    @override
   void initState() {
-    final ChatVm controller = Get.put(ChatVm());
+         final ChatVm controller = Get.put(ChatVm());
+
+    super.initState();
+    anController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+
+
     controller.isRecording = false;
     super.initState();
     // to get prev chat
     // controller.loadMessages();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +41,6 @@ class _ChatPageState extends State<ChatPage> {
         builder: (controller) {
           return Chat(
             messages: controller.messages,
-            // onAttachmentPressed: _handleAtachmentPressed,
             onMessageTap: controller.handleMessageTap,
             onPreviewDataFetched: controller.handlePreviewDataFetched,
             onSendPressed: controller.handleSendPressed,
@@ -37,20 +49,15 @@ class _ChatPageState extends State<ChatPage> {
             showUserNames: true,
             user: controller.user,
             customBottomWidget: Container(
+            
               margin: const EdgeInsets.symmetric(horizontal: 8),
               padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.5),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-              ),
+           
               child: Row(
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: InkWell(
+                    child:  InkWell(
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () => controller.handleFileSelection(),
@@ -58,45 +65,52 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                   ),
                   InkWell(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: () => controller.handleRecord(),
-                    child: const Icon(Icons.mic),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: InkWell(
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () => controller.handleImageSelection(),
                       child: const Icon(Icons.photo_camera),
                     ),
+                 
+               
+              
+                      Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child:    RecordButton(controller:anController )
+                    
+                    
+                  //   InkWell(
+                  //   splashColor: Colors.transparent,
+                  //   highlightColor: Colors.transparent,
+                  //   onTap: () => controller.handleRecord(),
+                  //   child: const Icon(Icons.mic),
+                  // ),
                   ),
-                  Expanded(
-                    child: Container(
-                      height: 40,
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: TextFormField(
-                          controller: controller.messageText,
-                          decoration: const InputDecoration(
-                            hintText: 'Aa',
-                            contentPadding: EdgeInsets.all(8),
-                            border: InputBorder.none,
-                            // suffixIcon: Icon(
-                            //   Icons.search,
-                            //   color: Colors.grey,
-                            // ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  ChatBox(controller: controller.messageText),
+                  // Expanded(
+                  //   child: Container(
+                  //     height: 40,
+                  //     margin: const EdgeInsets.symmetric(vertical: 8),
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.white,
+                  //       borderRadius: BorderRadius.circular(8),
+                  //     ),
+                  //     child: Directionality(
+                  //       textDirection: TextDirection.rtl,
+                  //       child: TextFormField(
+                  //         controller: controller.messageText,
+                  //         decoration: const InputDecoration(
+                  //           hintText: 'Aa',
+                  //           contentPadding: EdgeInsets.all(8),
+                  //           border: InputBorder.none,
+                  //           // suffixIcon: Icon(
+                  //           //   Icons.search,
+                  //           //   color: Colors.grey,
+                  //           // ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   IconButton(
                     onPressed: () {
                       if (controller.messageText.text.isNotEmpty) {
