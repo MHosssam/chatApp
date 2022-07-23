@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -36,24 +34,24 @@ class ChatVm extends GetxController {
     update();
   }
 
-  void handleFileSelection() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.any,
-    );
+  // void handleFileSelection() async {
+  //   final result = await FilePicker.platform.pickFiles(
+  //     type: FileType.any,
+  //   );
 
-    if (result != null && result.files.single.path != null) {
-      final message = types.FileMessage(
-        author: user,
-        createdAt: DateTime.now().millisecondsSinceEpoch,
-        id: const Uuid().v4(),
-        mimeType: lookupMimeType(result.files.single.path!),
-        name: result.files.single.name,
-        size: result.files.single.size,
-        uri: result.files.single.path!,
-      );
-      addMessage(message);
-    }
-  }
+  //   if (result != null && result.files.single.path != null) {
+  //     final message = types.FileMessage(
+  //       author: user,
+  //       createdAt: DateTime.now().millisecondsSinceEpoch,
+  //       id: const Uuid().v4(),
+  //       mimeType: lookupMimeType(result.files.single.path!),
+  //       name: result.files.single.name,
+  //       size: result.files.single.size,
+  //       uri: result.files.single.path!,
+  //     );
+  //     addMessage(message);
+  //   }
+  // }
 
   void handleImageSelection() async {
     final result = await ImagePicker().pickImage(
