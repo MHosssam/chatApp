@@ -64,6 +64,7 @@ class _RecordButtonState extends State<RecordButton> {
             if (controller.isRecording)
               Container(
                 height: 40,
+                width: MediaQuery.of(context).size.width*.72,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(27),
                   color: Colors.grey,
