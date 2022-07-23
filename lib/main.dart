@@ -1,3 +1,4 @@
+import 'package:chat/main_chat/main_chat_view.dart';
 import 'package:flutter/material.dart';
 
 import 'chat/chat_view.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ChatPage(),
+      home: const ChatsScreen(),
     );
   }
 }
