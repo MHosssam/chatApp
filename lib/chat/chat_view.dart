@@ -78,39 +78,30 @@ class _ChatPageState extends State<ChatPage> with SingleTickerProviderStateMixin
                     child:    RecordButton(controller:anController )
                     
                     
-                  //   InkWell(
-                  //   splashColor: Colors.transparent,
-                  //   highlightColor: Colors.transparent,
-                  //   onTap: () => controller.handleRecord(),
-                  //   child: const Icon(Icons.mic),
-                  // ),
+            
                   ),
-                  ChatBox(controller: controller.messageText),
-                  // Expanded(
-                  //   child: Container(
-                  //     height: 40,
-                  //     margin: const EdgeInsets.symmetric(vertical: 8),
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.white,
-                  //       borderRadius: BorderRadius.circular(8),
-                  //     ),
-                  //     child: Directionality(
-                  //       textDirection: TextDirection.rtl,
-                  //       child: TextFormField(
-                  //         controller: controller.messageText,
-                  //         decoration: const InputDecoration(
-                  //           hintText: 'Aa',
-                  //           contentPadding: EdgeInsets.all(8),
-                  //           border: InputBorder.none,
-                  //           // suffixIcon: Icon(
-                  //           //   Icons.search,
-                  //           //   color: Colors.grey,
-                  //           // ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+                 Expanded(
+      child: Container(
+        height: 42,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          color: Colors.black26,
+        ),
+        child:  Padding(
+          padding:const EdgeInsets.symmetric(horizontal: 20),
+          child: TextField(
+            maxLines: null,
+            cursorColor: Colors.black87,
+            controller: controller,
+            decoration:const InputDecoration(
+              hintText: 'Aa',
+              border: InputBorder.none,
+            ),
+          ),
+        ),
+      ),
+    )
+           ,
                   IconButton(
                     onPressed: () {
                       if (controller.messageText.text.isNotEmpty) {
