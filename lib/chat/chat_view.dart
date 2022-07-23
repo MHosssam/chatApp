@@ -1,5 +1,6 @@
 import 'package:chat/chat/chat_vm.dart';
 import 'package:chat/chat/components/record_button.dart';
+import 'package:chat/chat/widget/record_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
@@ -45,20 +46,15 @@ class _ChatPageState extends State<ChatPage>
             showUserAvatars: true,
             showUserNames: true,
             user: controller.user,
+            fileMessageBuilder: (types.FileMessage audio,
+                    {required int messageWidth}) =>
+                RecordView(audio: audio),
             customBottomWidget: Container(
               margin: const EdgeInsets.symmetric(horizontal: 8),
               padding: const EdgeInsets.all(4),
               child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: InkWell(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () => controller.handleFileSelection(),
-                      child: const Icon(Icons.attach_file),
-                    ),
-                  ),
+             
                   InkWell(
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
