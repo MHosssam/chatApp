@@ -1,5 +1,6 @@
 import 'package:chat/chat/chat_vm.dart';
 import 'package:chat/chat/widget/record_view.dart';
+import 'package:chat/chat/widget/text_message_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
@@ -37,6 +38,12 @@ class _ChatPageState extends State<ChatPage> {
             showUserAvatars: true,
             showUserNames: true,
             user: controller.user,
+            textMessageBuilder: (textMessage,
+                    {required int messageWidth, required bool showName}) =>
+                TextMessageView(
+              textMessage: textMessage,
+              messageWidth: messageWidth,
+            ),
             fileMessageBuilder: (types.FileMessage audio,
                     {required int messageWidth}) =>
                 RecordView(audio: audio),
