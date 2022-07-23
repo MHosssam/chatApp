@@ -1,4 +1,5 @@
 import 'package:chat/chat/chat_vm.dart';
+import 'package:chat/chat/components/record_button.dart';
 import 'package:chat/chat/widget/record_view.dart';
 import 'package:chat/chat/widget/text_message_view.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +14,19 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage>
+    with SingleTickerProviderStateMixin {
+
   @override
   void initState() {
     final ChatVm controller = Get.put(ChatVm());
+
+    super.initState();
+    controller.animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+
     controller.isRecording = false;
     super.initState();
     // to get prev chat
@@ -30,7 +40,6 @@ class _ChatPageState extends State<ChatPage> {
         builder: (controller) {
           return Chat(
             messages: controller.messages,
-            // onAttachmentPressed: _handleAtachmentPressed,
             onMessageTap: controller.handleMessageTap,
             onPreviewDataFetched: controller.handlePreviewDataFetched,
             onSendPressed: controller.handleSendPressed,
@@ -50,53 +59,35 @@ class _ChatPageState extends State<ChatPage> {
             customBottomWidget: Container(
               margin: const EdgeInsets.symmetric(horizontal: 8),
               padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.5),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-              ),
               child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(start: 6),
-                    child: InkWell(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () => controller.handleRecord(),
-                      child: const Icon(Icons.mic),
-                    ),
+             
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () => controller.handleImageSelection(),
+                    child: const Icon(Icons.photo_camera),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: InkWell(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () => controller.handleImageSelection(),
-                      child: const Icon(Icons.photo_camera),
-                    ),
-                  ),
-                  Expanded(
+                  const Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 6),
+                      child: RecordButton()),
+                            if (!controller.isRecording)
+  Expanded(
                     child: Container(
-                      height: 40,
-                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      height: 42,
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.black26,
                       ),
-                      child: Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: TextFormField(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: TextField(
+                          maxLines: null,
+                          cursorColor: Colors.black87,
                           controller: controller.messageText,
                           decoration: const InputDecoration(
                             hintText: 'Aa',
-                            contentPadding: EdgeInsets.all(8),
                             border: InputBorder.none,
-                            // suffixIcon: Icon(
-                            //   Icons.search,
-                            //   color: Colors.grey,
-                            // ),
                           ),
                         ),
                       ),

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ import 'package:get/get.dart';
 
 class ChatVm extends GetxController {
   bool isRecording = false;
-  final record = Record();
+  var record = Record();
   List<types.Message> messages = [];
   final user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
   final messageText = TextEditingController();
@@ -139,38 +140,73 @@ class ChatVm extends GetxController {
     addMessage(textMessage);
   }
 
-  Future<void> handleRecord() async {
-    isRecording = !isRecording;
-    if (await record.hasPermission()) {
-      final documentsDir = (await getApplicationDocumentsDirectory()).path;
-      final localPath = '$documentsDir/myFile.m4a';
-      if (isRecording == true) {
-        // Start recording
-        await record.start(
-          path: localPath,
-          encoder: AudioEncoder.aacLc, // by default
-          bitRate: 128000, // by default
-          samplingRate: 44100, // by default
-        );
-      } else {
-        // Stop recording
-        await record.stop();
-      }
-      if (!await record.isRecording()) {
-        //Add record on message
-        final message = types.FileMessage(
-          author: user,
-          createdAt: DateTime.now().millisecondsSinceEpoch,
-          id: const Uuid().v4(),
-          mimeType: lookupMimeType(localPath),
-          name: 'Record',
-          size: localPath.length,
-          uri: localPath,
-        );
-        addMessage(message);
-      }
-    }
+  DateTime? startTime;
+  Timer? timer;
+  String recordDuration = "00:00";
+  late AnimationController animationController;
 
+  bool showDelete = false;
+  bool isCancelled(Offset offset, BuildContext context) {
+    return (offset.dx >= (MediaQuery.of(context).size.width * 0.2));
+  }
+
+  Future<void> onLongPressDown() async {
+    isRecording = true;
+    animationController.forward();
+    update();
+  }
+
+  Future<void> onLongPressEnd(recordDetails, context) async {
+    timer?.cancel();
+    timer = null;
+    startTime = null;
+    recordDuration = "00:00";
+    var filePath = await record.stop();
+
+    if (isCancelled(recordDetails.localPosition, context)) {
+      showDelete = true;
+
+      Timer(const Duration(milliseconds: 1440), () async {
+        animationController.reverse();
+        showDelete = false;
+        isRecording = false;
+        File(filePath!).delete();
+            update();
+
+      });
+    } else {
+      animationController.reverse();
+
+      isRecording = false;
+      final message = types.FileMessage(
+        author: user,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        id: const Uuid().v4(),
+        mimeType: lookupMimeType(filePath!),
+        name: 'Record',
+        size: filePath.length,
+        uri: filePath,
+      );
+      addMessage(message);
+    }
+    update();
+  }
+
+  Future<void> onLongPress() async {
+    var hasPermission = await Record().hasPermission();
+    if (hasPermission) {
+      record = Record();
+      await record.start();
+      startTime = DateTime.now();
+      timer = Timer.periodic(const Duration(seconds: 1), (_) {
+        final minDur = DateTime.now().difference(startTime!).inMinutes;
+        final secDur = DateTime.now().difference(startTime!).inSeconds % 60;
+        String min = minDur < 10 ? "0$minDur" : minDur.toString();
+        String sec = secDur < 10 ? "0$secDur" : secDur.toString();
+
+        recordDuration = "$min:$sec";
+      });
+    }
     update();
   }
 }
