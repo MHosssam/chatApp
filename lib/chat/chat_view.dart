@@ -14,14 +14,13 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage>
     with SingleTickerProviderStateMixin {
-  late AnimationController anController;
 
   @override
   void initState() {
     final ChatVm controller = Get.put(ChatVm());
 
     super.initState();
-    anController = AnimationController(
+    controller.animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
@@ -66,9 +65,9 @@ class _ChatPageState extends State<ChatPage>
                     onTap: () => controller.handleImageSelection(),
                     child: const Icon(Icons.photo_camera),
                   ),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6),
-                      child: RecordButton(controller: anController)),
+                  const Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 6),
+                      child: RecordButton()),
                   Expanded(
                     child: Container(
                       height: 42,
