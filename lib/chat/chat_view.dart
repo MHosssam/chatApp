@@ -1,5 +1,4 @@
 import 'package:chat/chat/chat_vm.dart';
-import 'package:chat/chat/components/chat_box.dart';
 import 'package:chat/chat/components/record_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -13,12 +12,13 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> with SingleTickerProviderStateMixin {
-        late AnimationController anController;
+class _ChatPageState extends State<ChatPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController anController;
 
-    @override
+  @override
   void initState() {
-         final ChatVm controller = Get.put(ChatVm());
+    final ChatVm controller = Get.put(ChatVm());
 
     super.initState();
     anController = AnimationController(
@@ -26,13 +26,11 @@ class _ChatPageState extends State<ChatPage> with SingleTickerProviderStateMixin
       duration: const Duration(milliseconds: 600),
     );
 
-
     controller.isRecording = false;
     super.initState();
     // to get prev chat
     // controller.loadMessages();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -49,15 +47,13 @@ class _ChatPageState extends State<ChatPage> with SingleTickerProviderStateMixin
             showUserNames: true,
             user: controller.user,
             customBottomWidget: Container(
-            
               margin: const EdgeInsets.symmetric(horizontal: 8),
               padding: const EdgeInsets.all(4),
-           
               child: Row(
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child:  InkWell(
+                    child: InkWell(
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () => controller.handleFileSelection(),
@@ -65,43 +61,35 @@ class _ChatPageState extends State<ChatPage> with SingleTickerProviderStateMixin
                     ),
                   ),
                   InkWell(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () => controller.handleImageSelection(),
-                      child: const Icon(Icons.photo_camera),
-                    ),
-                 
-               
-              
-                      Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child:    RecordButton(controller:anController )
-                    
-                    
-            
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () => controller.handleImageSelection(),
+                    child: const Icon(Icons.photo_camera),
                   ),
-                 Expanded(
-      child: Container(
-        height: 42,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: Colors.black26,
-        ),
-        child:  Padding(
-          padding:const EdgeInsets.symmetric(horizontal: 20),
-          child: TextField(
-            maxLines: null,
-            cursorColor: Colors.black87,
-            controller: controller,
-            decoration:const InputDecoration(
-              hintText: 'Aa',
-              border: InputBorder.none,
-            ),
-          ),
-        ),
-      ),
-    )
-           ,
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: RecordButton(controller: anController)),
+                  Expanded(
+                    child: Container(
+                      height: 42,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.black26,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: TextField(
+                          maxLines: null,
+                          cursorColor: Colors.black87,
+                          controller: controller.messageText,
+                          decoration: const InputDecoration(
+                            hintText: 'Aa',
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   IconButton(
                     onPressed: () {
                       if (controller.messageText.text.isNotEmpty) {
