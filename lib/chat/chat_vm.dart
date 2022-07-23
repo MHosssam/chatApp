@@ -10,11 +10,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:record/record.dart';
 import 'package:uuid/uuid.dart';
 import 'package:get/get.dart';
 
 class ChatVm extends GetxController {
-  
+  bool isRecording = false;
+  final record = Record();
   List<types.Message> messages = [];
   final user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
   final messageText = TextEditingController();
@@ -137,5 +139,40 @@ class ChatVm extends GetxController {
       text: message.text,
     );
     addMessage(textMessage);
+  }
+
+  Future<void> handleRecord() async {
+    isRecording = !isRecording;
+    if (await record.hasPermission()) {
+      final documentsDir = (await getApplicationDocumentsDirectory()).path;
+      final localPath = '$documentsDir/myFile.m4a';
+      if (isRecording == true) {
+        // Start recording
+        await record.start(
+          path: localPath,
+          encoder: AudioEncoder.aacLc, // by default
+          bitRate: 128000, // by default
+          samplingRate: 44100, // by default
+        );
+      } else {
+        // Stop recording
+        await record.stop();
+      }
+      if (!await record.isRecording()) {
+        //Add record on message
+        final message = types.FileMessage(
+          author: user,
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+          id: const Uuid().v4(),
+          mimeType: lookupMimeType(localPath),
+          name: 'Record',
+          size: localPath.length,
+          uri: localPath,
+        );
+        addMessage(message);
+      }
+    }
+
+    update();
   }
 }

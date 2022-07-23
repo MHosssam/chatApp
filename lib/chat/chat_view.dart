@@ -15,6 +15,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     final ChatVm controller = Get.put(ChatVm());
+    controller.isRecording = false;
     super.initState();
     // to get prev chat
     // controller.loadMessages();
@@ -59,7 +60,7 @@ class _ChatPageState extends State<ChatPage> {
                   InkWell(
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
-                    onTap: () {},
+                    onTap: () => controller.handleRecord(),
                     child: const Icon(Icons.mic),
                   ),
                   Padding(
