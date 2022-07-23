@@ -1,11 +1,12 @@
 import 'package:chat/chat/chat_vm.dart';
 import 'package:chat/chat/components/record_button.dart';
-import 'package:chat/chat/widget/record_view.dart';
-import 'package:chat/chat/widget/text_message_view.dart';
+import 'package:chat/chat/components/record_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:get/get.dart';
+
+import 'components/text_message_view.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -16,7 +17,6 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage>
     with SingleTickerProviderStateMixin {
-
   @override
   void initState() {
     final ChatVm controller = Get.put(ChatVm());
@@ -61,7 +61,6 @@ class _ChatPageState extends State<ChatPage>
               padding: const EdgeInsets.all(4),
               child: Row(
                 children: [
-             
                   InkWell(
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
@@ -69,30 +68,31 @@ class _ChatPageState extends State<ChatPage>
                     child: const Icon(Icons.photo_camera),
                   ),
                   const Padding(
-                      padding:  EdgeInsets.symmetric(horizontal: 6),
-                      child: RecordButton()),
-                            if (!controller.isRecording)
-  Expanded(
-                    child: Container(
-                      height: 42,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.black26,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: TextField(
-                          maxLines: null,
-                          cursorColor: Colors.black87,
-                          controller: controller.messageText,
-                          decoration: const InputDecoration(
-                            hintText: 'Aa',
-                            border: InputBorder.none,
+                    padding: EdgeInsets.symmetric(horizontal: 6),
+                    child: RecordButton(),
+                  ),
+                  if (!controller.isRecording)
+                    Expanded(
+                      child: Container(
+                        height: 42,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.black26,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: TextField(
+                            maxLines: null,
+                            cursorColor: Colors.black87,
+                            controller: controller.messageText,
+                            decoration: const InputDecoration(
+                              hintText: 'Aa',
+                              border: InputBorder.none,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
                   IconButton(
                     onPressed: () {
                       if (controller.messageText.text.isNotEmpty) {
